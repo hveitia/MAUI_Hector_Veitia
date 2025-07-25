@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <RestoreSuccess Condition=" '$(RestoreSuccess)' == '' ">True</RestoreSuccess>
+    <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
+    <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
+    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">/Users/hector/.nuget/packages/</NuGetPackageRoot>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">/Users/hector/.nuget/packages/</NuGetPackageFolders>
+    <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.14.0</NuGetToolVersion>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <SourceRoot Include="/Users/hector/.nuget/packages/" />
+  </ItemGroup>
+  <ImportGroup Condition=" '$(TargetFramework)' == 'net9.0-android' AND '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)microsoft.maui.core/9.0.50/buildTransitive/Microsoft.Maui.Core.props" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.core/9.0.50/buildTransitive/Microsoft.Maui.Core.props')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.maui.resizetizer/9.0.50/buildTransitive/Microsoft.Maui.Resizetizer.props" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.resizetizer/9.0.50/buildTransitive/Microsoft.Maui.Resizetizer.props')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.maui.controls.build.tasks/9.0.50/buildTransitive/netstandard2.0/Microsoft.Maui.Controls.Build.Tasks.props" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.controls.build.tasks/9.0.50/buildTransitive/netstandard2.0/Microsoft.Maui.Controls.Build.Tasks.props')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.net.illink.tasks/9.0.7/build/Microsoft.NET.ILLink.Tasks.props" Condition="Exists('$(NuGetPackageRoot)microsoft.net.illink.tasks/9.0.7/build/Microsoft.NET.ILLink.Tasks.props')" />
+    <Import Project="$(NuGetPackageRoot)devexpress.maui.core/25.1.3/build/DevExpress.Maui.Core.props" Condition="Exists('$(NuGetPackageRoot)devexpress.maui.core/25.1.3/build/DevExpress.Maui.Core.props')" />
+  </ImportGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net9.0-android' AND '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgMicrosoft_NET_ILLink_Tasks Condition=" '$(PkgMicrosoft_NET_ILLink_Tasks)' == '' ">/Users/hector/.nuget/packages/microsoft.net.illink.tasks/9.0.7</PkgMicrosoft_NET_ILLink_Tasks>
+    <PkgDevExpress_Data Condition=" '$(PkgDevExpress_Data)' == '' ">/Users/hector/.nuget/packages/devexpress.data/25.1.3</PkgDevExpress_Data>
+  </PropertyGroup>
+</Project>
