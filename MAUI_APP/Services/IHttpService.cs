@@ -8,4 +8,5 @@ public interface IHttpService
     Task<T?> DeleteAsync<T>(string endpoint);
     void SetAuthToken(string token);
     void ClearAuthToken();
+    bool HasAuthToken();
 }

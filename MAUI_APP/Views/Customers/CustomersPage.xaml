@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MAUI_APP.Views.Customers.CustomersPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dx="http://schemas.devexpress.com/maui"
+    Title="{Binding Title}">
+    
+    <Grid RowDefinitions="Auto,*">
+        
+        <!-- Header with refresh button -->
+        <Grid Grid.Row="0" Padding="20" ColumnDefinitions="*,Auto">
+            <Label 
+                Grid.Column="0"
+                Text="Lista de Clientes"
+                FontSize="24"
+                FontFamily="Roboto-Bold"
+                TextColor="{dx:ThemeColor OnSurface}"
+                VerticalOptions="Center"/>
+            
+            <dx:DXButton 
+                Grid.Column="1"
+                Content="Actualizar"
+                Command="{Binding GetCustomersCommand}"
+                IsEnabled="{Binding IsNotBusy}"
+                BackgroundColor="{dx:ThemeColor Primary}"
+                TextColor="{dx:ThemeColor OnPrimary}"
+                CornerRadius="8"
+                Padding="16,8"/>
+        </Grid>
+
+        <!-- Loading indicator -->
+        <ActivityIndicator 
+            Grid.Row="1"
+            IsVisible="{Binding IsBusy}"
+            IsRunning="{Binding IsBusy}"
+            Color="{dx:ThemeColor Primary}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"/>
+
+        <!-- Customers list -->
+        <dx:DXCollectionView 
+            Grid.Row="1"
+            ItemsSource="{Binding AllCustomers}"
+            IsVisible="{Binding IsNotBusy}"
+            Margin="20,0">
+            
+            <dx:DXCollectionView.ItemTemplate>
+                <DataTemplate>
+                    <dx:DXBorder 
+                        BackgroundColor="{dx:ThemeColor SurfaceContainer}"
+                        CornerRadius="12"
+                        Margin="0,8">
+                        
+                        <Grid Padding="16" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                            
+                            <!-- Customer Name -->
+                            <Label 
+                                Grid.Row="0" 
+                                Grid.Column="0"
+                                Text="{Binding FullName}"
+                                FontSize="18"
+                                FontFamily="Roboto-Medium"
+                                TextColor="{dx:ThemeColor OnSurface}"/>
+                            
+                            <!-- Customer Status -->
+                            <Label 
+                                Grid.Row="0" 
+                                Grid.Column="1"
+                                Text="{Binding Active, StringFormat='Estado: {0}'}"
+                                FontSize="12"
+                                FontFamily="Roboto"
+                                TextColor="{dx:ThemeColor OnSurfaceVariant}"
+                                VerticalOptions="Center"/>
+                            
+                            <!-- Customer ID -->
+                            <Label 
+                                Grid.Row="1" 
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                Text="{Binding Oid, StringFormat='ID: {0}'}"
+                                FontSize="14"
+                                FontFamily="Roboto"
+                                TextColor="{dx:ThemeColor OnSurfaceVariant}"
+                                Margin="0,4,0,0"/>
+                            
+                            <!-- Birthday -->
+                            <Label 
+                                Grid.Row="2" 
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                Text="{Binding Birthday, StringFormat='Cumpleaños: {0}'}"
+                                FontSize="12"
+                                FontFamily="Roboto"
+                                TextColor="{dx:ThemeColor OnSurfaceVariant}"
+                                Margin="0,4,0,0"/>
+                        </Grid>
+                    </dx:DXBorder>
+                </DataTemplate>
+            </dx:DXCollectionView.ItemTemplate>
+            
+            
+        </dx:DXCollectionView>
+        
+    </Grid>
+
+</ContentPage>

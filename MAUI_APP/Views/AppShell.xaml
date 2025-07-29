@@ -4,7 +4,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:dx="http://schemas.devexpress.com/maui"
-    xmlns:views="clr-namespace:MAUI_APP.Views">
+    xmlns:views="clr-namespace:MAUI_APP.Views"
+    xmlns:customers="clr-namespace:MAUI_APP.Views.Customers">
 
     <Shell.Resources>
         <Style x:Key="ShellItemStyle" TargetType="dx:DXToggleButton">
@@ -40,4 +41,10 @@
         Title="Welcome"
         Icon="star"
         ContentTemplate="{DataTemplate views:DefaultPage}" />
+        
+    <ShellContent
+        Title="Clientes"
+        Icon="person"
+        Route="customers"
+        ContentTemplate="{DataTemplate customers:CustomersPage}" />
 </Shell>

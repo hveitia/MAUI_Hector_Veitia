@@ -63,11 +63,24 @@ public class LoginViewModel : BaseViewModel
 
             if (response.Oid != null && !string.IsNullOrEmpty(response.Token))
             {
+                System.Diagnostics.Debug.WriteLine($"Login exitoso - Token recibido: {response.Token[..Math.Min(response.Token.Length, 20)]}...");
+                
                 // Set authentication token
                 _httpService.SetAuthToken(response.Token);
+                System.Diagnostics.Debug.WriteLine("Token configurado en HttpService");
                 
-                // Navigate to main page or handle successful login
-                await Shell.Current.DisplayAlert("Éxito", "Login exitoso", "OK");
+                // Verificar que el token se configuró correctamente
+                if (_httpService.HasAuthToken())
+                {
+                    System.Diagnostics.Debug.WriteLine("✅ Verificación: Token está presente en HttpService");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("❌ ERROR: Token NO se configuró correctamente");
+                }
+                
+                // Navigate to customers page
+                await Shell.Current.GoToAsync("//customers");
             }
             else
             {

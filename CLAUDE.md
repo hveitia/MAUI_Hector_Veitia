@@ -2,6 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Language Preference
+**IMPORTANTE: Claude debe responder SIEMPRE en español cuando trabaje en este proyecto.** Todas las explicaciones, comentarios y comunicación deben ser en español, excepto cuando se trate de código o comandos específicos.
+
 ## Project Overview
 
 This is a .NET MAUI (Multi-platform App UI) application targeting Android platforms using .NET 9.0. The project extensively uses DevExpress MAUI components and implements a complete MVVM architecture with API integration.
@@ -129,3 +132,130 @@ Consistent error handling with ApiResponse<T> wrapper:
 - Success/Error flags
 - Typed data responses
 - Localized error messages in Spanish
+
+## Customer Management Implementation
+
+### Customer Model
+Located in `Models/User.cs`, the Customer class includes:
+- **Oid**: Unique identifier from API
+- **Name/LastName**: Customer names
+- **Birthday**: Customer birth date
+- **Active**: Status flag
+- **FullName**: Computed property combining Name + LastName
+
+### CustomersPage Implementation
+- **Location**: `Views/Customers/CustomersPage.xaml`
+- **ViewModel**: `ViewModels/CustomersViewModel.cs`
+- **Navigation**: Registered in AppShell with route "customers"
+- **Auto-loading**: Customers load automatically when page appears
+- **UI Components**: Uses DXCollectionView with card-style customer display
+
+### Navigation Flow
+After successful login:
+1. LoginViewModel navigates to "//customers" route
+2. CustomersPage loads with bound CustomersViewModel
+3. Page automatically calls GetCustomersAsync() on appearance
+4. Customers display in themed card layout with DevExpress styling
+
+## Authentication Token Management
+
+### Issue Resolved: 403 Unauthorized Error
+**Problem**: HttpService instances were not sharing the authentication token due to dependency injection configuration.
+
+**Root Cause**: Using `AddHttpClient<IHttpService, HttpService>()` created separate instances, causing the token set in LoginViewModel to be lost when CustomersViewModel was instantiated.
+
+**Solution**: 
+- Changed to **Singleton pattern** for HttpService in `MauiProgram.cs`
+- Uses named HttpClient factory pattern to maintain single instance
+- Token persists across all service calls throughout app lifecycle
+
+### Implementation Details
+```csharp
+// HttpService registered as Singleton
+builder.Services.AddSingleton<IHttpService, HttpService>(provider =>
+{
+    var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
+    var httpClient = httpClientFactory.CreateClient("MainHttpClient");
+    return new HttpService(httpClient);
+});
+```
+
+### Debug Features Added
+- Comprehensive HTTP request/response logging
+- Token verification methods (`HasAuthToken()`)
+- Authentication error detection and user notifications
+- Automatic re-login flow for expired tokens
+
+## JSON Deserialization Issue Resolved
+
+### Issue: JSON Conversion Error
+**Problem**: `The JSON value could not be converted to System.String` error when calling GetCustomersAsync.
+
+**Root Cause**: HttpService was attempting double deserialization:
+1. First deserializing JSON response to `string`
+2. Then deserializing that string to target type `T`
+
+This fails when the API returns direct JSON arrays/objects instead of JSON-encoded strings.
+
+**Solution**: Implemented fallback deserialization strategy:
+1. **Try direct deserialization first** (most common case)
+2. **Fallback to double deserialization** if direct fails (for APIs that return JSON as strings)
+3. **Comprehensive error logging** to identify which approach succeeded
+
+### Implementation
+```csharp
+// Try direct deserialization first
+try
+{
+    var result = JsonSerializer.Deserialize<T>(content);
+    return result;
+}
+catch (JsonException)
+{
+    // Fallback to double deserialization
+    string innerJson = JsonSerializer.Deserialize<string>(content);
+    var result = JsonSerializer.Deserialize<T>(innerJson);
+    return result;
+}
+```
+
+## OData Integration Support
+
+### Issue: OData Response Structure
+**Problem**: API returns OData format with `@odata.context` and `value` wrapper, but code expected direct array.
+
+**Example API Response**:
+```json
+{
+  "@odata.context": "https://veitia.xari.net/api/odata/$metadata#Customer",
+  "value": [
+    {
+      "Oid": "6c7baa43-c489-42ac-b7d7-aab420ed111d",
+      "Birthday": "0001-01-01T00:00:00Z",
+      "Name": "Hector",
+      "LastName": "Veitia",
+      "Active": true
+    }
+  ]
+}
+```
+
+**Solution**: Created `ODataResponse<T>` generic model to handle OData wrapper structure.
+
+### Implementation
+```csharp
+public class ODataResponse<T>
+{
+    [JsonPropertyName("@odata.context")]
+    public string? Context { get; set; }
+
+    [JsonPropertyName("value")]
+    public List<T> Value { get; set; } = [];
+}
+```
+
+### Usage in ApiService
+```csharp
+var odataResponse = await _httpService.GetAsync<ODataResponse<Customer>>("odata/Customer");
+return odataResponse?.Value ?? [];
+```

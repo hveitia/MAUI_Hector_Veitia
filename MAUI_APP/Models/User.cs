@@ -46,3 +46,38 @@ public class LoginResponse
     [JsonPropertyName("UserName")]
     public string UserName { get; set; } = string.Empty;
 }
+
+public class Customer
+{
+    [JsonPropertyName("Oid")]
+    public string Oid { get; set; } = string.Empty;
+
+    [JsonPropertyName("Birthday")]
+    public string Birthday { get; set; } = string.Empty;
+
+    [JsonPropertyName("Name")]
+    public string Name { get; set; } = string.Empty;
+
+    [JsonPropertyName("LastName")]
+    public string LastName { get; set; } = string.Empty;
+
+    [JsonPropertyName("Active")]
+    public bool Active { get; set; }
+
+    // Additional computed properties for display
+    public string FullName => $"{Name} {LastName}".Trim();
+    public int Id => string.IsNullOrEmpty(Oid) ? 0 : Oid.GetHashCode();
+    public string Email => string.Empty; // Can be updated when API provides this
+    public string Phone => string.Empty; // Can be updated when API provides this  
+    public string Address => string.Empty; // Can be updated when API provides this
+}
+
+// Modelo para manejar respuestas OData
+public class ODataResponse<T>
+{
+    [JsonPropertyName("@odata.context")]
+    public string? Context { get; set; }
+
+    [JsonPropertyName("value")]
+    public List<T> Value { get; set; } = [];
+}

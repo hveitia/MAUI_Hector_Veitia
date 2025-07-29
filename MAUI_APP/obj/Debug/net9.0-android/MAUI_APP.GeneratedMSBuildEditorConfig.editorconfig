@@ -43,6 +43,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = MAUI_APP.Views.AppShell.xa
 build_metadata.AdditionalFiles.TargetPath = Views/AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = Views/AppShell.xaml
 
+[/Users/hector/Documents/Work/Xari/maui_example/MAUI_APP/MAUI_APP/Views/Customers/CustomersPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = MAUI_APP.Views.Customers.CustomersPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/Customers/CustomersPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/Customers/CustomersPage.xaml
+
 [/Users/hector/Documents/Work/Xari/maui_example/MAUI_APP/MAUI_APP/Views/DefaultPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = MAUI_APP.Views.DefaultPage.xaml
