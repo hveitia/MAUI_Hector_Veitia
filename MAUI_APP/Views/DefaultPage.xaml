@@ -35,11 +35,35 @@
                 IsPassword="True"
             />
 
-            <Button
-                x:Name="LoginBtn"
-                Text="Enter" 
-                Command="{Binding LoginCommand}"
-                HorizontalOptions="Fill" />
+            <StackLayout HorizontalOptions="Fill" Spacing="0">
+                <Button
+                    x:Name="LoginBtn"
+                    Text="Enter"
+                    Command="{Binding LoginCommand}"
+                    HorizontalOptions="Fill"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+                    IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+                
+                <StackLayout 
+                    Orientation="Horizontal"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    IsVisible="{Binding IsBusy}"
+                    BackgroundColor="{dx:ThemeColor Primary}"
+                    Padding="14,10"
+                    HeightRequest="44">
+                    <ActivityIndicator 
+                        IsRunning="{Binding IsBusy}"
+                        Color="White"
+                        WidthRequest="20"
+                        HeightRequest="20" />
+                    <Label 
+                        Text="Iniciando sesión..."
+                        Margin="10,0,0,0"
+                        VerticalOptions="Center"
+                        TextColor="White" />
+                </StackLayout>
+            </StackLayout>
         </VerticalStackLayout>
     </ScrollView>
     

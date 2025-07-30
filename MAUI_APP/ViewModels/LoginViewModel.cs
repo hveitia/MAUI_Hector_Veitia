@@ -18,6 +18,14 @@ public class LoginViewModel : BaseViewModel
         _httpService = httpService;
         LoginCommand = new Command(async () => await LoginAsync(), () => !IsBusy);
         Title = "Login";
+        
+        PropertyChanged += (sender, e) =>
+        {
+            if (e.PropertyName == nameof(IsBusy))
+            {
+                ((Command)LoginCommand).ChangeCanExecute();
+            }
+        };
     }
 
     public string Username
