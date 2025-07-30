@@ -12,7 +12,7 @@
         <Grid Grid.Row="0" Padding="20" ColumnDefinitions="*,Auto">
             <Label 
                 Grid.Column="0"
-                Text="Lista de Clientes"
+                Text="Customers List"
                 FontSize="24"
                 FontFamily="Roboto-Bold"
                 TextColor="{dx:ThemeColor OnSurface}"
@@ -20,7 +20,7 @@
             
             <dx:DXButton 
                 Grid.Column="1"
-                Content="Actualizar"
+                Content="Update"
                 Command="{Binding GetCustomersCommand}"
                 IsEnabled="{Binding IsNotBusy}"
                 BackgroundColor="{dx:ThemeColor Primary}"
@@ -67,7 +67,7 @@
                             <Label 
                                 Grid.Row="0" 
                                 Grid.Column="1"
-                                Text="{Binding Active, StringFormat='Estado: {0}'}"
+                                Text="{Binding Active, StringFormat='State: {0}'}"
                                 FontSize="12"
                                 FontFamily="Roboto"
                                 TextColor="{dx:ThemeColor OnSurfaceVariant}"
@@ -89,7 +89,7 @@
                                 Grid.Row="2" 
                                 Grid.Column="0"
                                 Grid.ColumnSpan="2"
-                                Text="{Binding Birthday, StringFormat='Cumpleaños: {0}'}"
+                                Text="{Binding Birthday, StringFormat='Birthday: {0}'}"
                                 FontSize="12"
                                 FontFamily="Roboto"
                                 TextColor="{dx:ThemeColor OnSurfaceVariant}"
@@ -116,6 +116,8 @@
                                 
                                 <dx:DXButton 
                                     Content="Delete"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteCustomerCommand}"
+                                    CommandParameter="{Binding Oid}"
                                     BackgroundColor="#D32F2F"
                                     TextColor="White"
                                     CornerRadius="6"

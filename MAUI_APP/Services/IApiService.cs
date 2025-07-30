@@ -11,4 +11,5 @@ public interface IApiService
     Task<ApiResponse<User>> UpdateUserAsync(int userId, User user);
     Task<ApiResponse> DeleteUserAsync(int userId);
     Task<List<Customer>> GetCustomersAsync();
+    Task<object> DeleteCustomerAsync(string oid);
 }

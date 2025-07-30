@@ -157,9 +157,10 @@ public class HttpService : IHttpService
         {
             var response = await _httpClient.DeleteAsync(endpoint);
             response.EnsureSuccessStatusCode();
-            
+
             var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<T>(content, _jsonOptions);
+            var result = JsonSerializer.Deserialize<T>(content, _jsonOptions);
+            return result;
         }
         catch (Exception ex)
         {

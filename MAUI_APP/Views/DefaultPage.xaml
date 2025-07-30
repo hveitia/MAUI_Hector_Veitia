@@ -58,7 +58,7 @@
                         WidthRequest="20"
                         HeightRequest="20" />
                     <Label 
-                        Text="Iniciando sesión..."
+                        Text="Logging in..."
                         Margin="10,0,0,0"
                         VerticalOptions="Center"
                         TextColor="White" />

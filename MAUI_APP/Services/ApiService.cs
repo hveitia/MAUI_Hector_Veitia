@@ -24,7 +24,7 @@ public class ApiService : IApiService
         return response ?? new ApiResponse<User>
         {
             Success = false,
-            Error = "Error al obtener el usuario"
+            Error = "Error getting user"
         };
     }
 
@@ -34,7 +34,7 @@ public class ApiService : IApiService
         return response ?? new ApiResponse<List<User>>
         {
             Success = false,
-            Error = "Error al obtener los usuarios"
+            Error = "Error getting users"
         };
     }
 
@@ -44,7 +44,7 @@ public class ApiService : IApiService
         return response ?? new ApiResponse<User>
         {
             Success = false,
-            Error = "Error al crear el usuario"
+            Error = "Error creating user"
         };
     }
 
@@ -54,7 +54,7 @@ public class ApiService : IApiService
         return response ?? new ApiResponse<User>
         {
             Success = false,
-            Error = "Error al actualizar el usuario"
+            Error = "Error updating user"
         };
     }
 
@@ -64,7 +64,7 @@ public class ApiService : IApiService
         return response ?? new ApiResponse
         {
             Success = false,
-            Error = "Error al eliminar el usuario"
+            Error = "Error deleting user"
         };
     }
     
@@ -72,38 +72,83 @@ public class ApiService : IApiService
     {
         try
         {
-            System.Diagnostics.Debug.WriteLine("Iniciando GetCustomersAsync...");
+            System.Diagnostics.Debug.WriteLine("Starting GetCustomersAsync...");
             
-            // Llamar al endpoint OData que devuelve la estructura completa
+            // Call OData endpoint that returns the complete structure
             var odataResponse = await _httpService.GetAsync<ODataResponse<Customer>>("odata/Customer");
             
             if (odataResponse?.Value != null)
             {
-                System.Diagnostics.Debug.WriteLine($"Respuesta OData recibida: {odataResponse.Value.Count} clientes");
+                System.Diagnostics.Debug.WriteLine($"OData response received: {odataResponse.Value.Count} customers");
                 System.Diagnostics.Debug.WriteLine($"Context: {odataResponse.Context}");
                 return odataResponse.Value;
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Respuesta OData nula o sin valor");
+                System.Diagnostics.Debug.WriteLine("OData response null or without value");
                 return [];
             }
         }
         catch (HttpRequestException httpEx)
         {
-            System.Diagnostics.Debug.WriteLine($"Error HTTP en GetCustomersAsync: {httpEx.Message}");
-            // Verificar si es un problema de autenticación
+            System.Diagnostics.Debug.WriteLine($"HTTP error in GetCustomersAsync: {httpEx.Message}");
+            // Check if it's an authentication problem
             if (httpEx.Message.Contains("401") || httpEx.Message.Contains("403"))
             {
-                System.Diagnostics.Debug.WriteLine("Error de autenticación - Token inválido o expirado");
+                System.Diagnostics.Debug.WriteLine("Authentication error - Invalid or expired token");
             }
             return [];
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Error general en GetCustomersAsync: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"General error in GetCustomersAsync: {ex.Message}");
             System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
             return [];
+        }
+    }
+    
+    public async Task<object> DeleteCustomerAsync(string oid)
+    {
+        try
+        {
+            System.Diagnostics.Debug.WriteLine($"Starting DeleteCustomerAsync for OID: {oid}");
+            
+            // Call OData endpoint to delete the customer
+            var response = await _httpService.DeleteAsync<ODataResponse<object>>($"odata/Customer({oid})");
+            
+            if (response?.Value != null)
+            {
+                System.Diagnostics.Debug.WriteLine($"Customer deleted successfully: {oid}");
+                return response.Value;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Null response when deleting customer: {oid}");
+                return false;
+            }
+        }
+        catch (HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP error in DeleteCustomerAsync: {httpEx.Message}");
+            
+            if (httpEx.Message.Contains("401") || httpEx.Message.Contains("403"))
+            {
+                System.Diagnostics.Debug.WriteLine("Authentication error - Invalid or expired token");
+                return false;
+            }
+            else if (httpEx.Message.Contains("404"))
+            {
+                return false;
+            }
+
+            return false;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"General error in DeleteCustomerAsync: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+            
+            return false;
         }
     }
 }
