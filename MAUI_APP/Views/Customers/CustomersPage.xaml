@@ -107,6 +107,8 @@
                                 
                                 <dx:DXButton 
                                     Content="Edit"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditCustomerCommand}"
+                                    CommandParameter="{Binding}"
                                     BackgroundColor="{dx:ThemeColor Primary}"
                                     TextColor="{dx:ThemeColor OnPrimary}"
                                     CornerRadius="6"
@@ -133,6 +135,128 @@
             
             
         </dx:DXCollectionView>
+        
+        <!-- Edit Customer Popup -->
+        <dx:DXPopup 
+            x:Name="EditCustomerPopup"
+            Grid.RowSpan="2"
+            IsOpen="{Binding IsEditPopupOpen}"
+            AllowScrim="True"
+            ScrimColor="Black">
+        
+        <dx:DXBorder 
+            BackgroundColor="{dx:ThemeColor Surface}"
+            CornerRadius="16"
+            Padding="24"
+            WidthRequest="350">
+            
+            <Grid RowDefinitions="Auto,*,Auto">
+                
+                <!-- Popup Header -->
+                <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,20">
+                    <Label 
+                        Grid.Column="0"
+                        Text="Edit Customer"
+                        FontSize="20"
+                        FontFamily="Roboto-Bold"
+                        TextColor="{dx:ThemeColor OnSurface}"
+                        VerticalOptions="Center"/>
+                    
+                    <dx:DXButton 
+                        Grid.Column="1"
+                        Content="✕"
+                        Command="{Binding CloseEditPopupCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="{dx:ThemeColor OnSurface}"
+                        FontSize="18"
+                        WidthRequest="32"
+                        HeightRequest="32"
+                        CornerRadius="16"/>
+                </Grid>
+                
+                <!-- Popup Content -->
+                <StackLayout Grid.Row="1" Spacing="16">
+                    
+                    <!-- Name Field -->
+                    <StackLayout>
+                        <Label 
+                            Text="First Name"
+                            FontSize="14"
+                            FontFamily="Roboto-Medium"
+                            TextColor="{dx:ThemeColor OnSurface}"
+                            Margin="0,0,0,4"/>
+                        <Entry 
+                            Text="{Binding EditingCustomer.Name}"
+                            BackgroundColor="{dx:ThemeColor SurfaceContainer}"
+                            TextColor="{dx:ThemeColor OnSurface}"
+                            FontSize="16"/>
+                    </StackLayout>
+                    
+                    <!-- Last Name Field -->
+                    <StackLayout>
+                        <Label 
+                            Text="Last Name"
+                            FontSize="14"
+                            FontFamily="Roboto-Medium"
+                            TextColor="{dx:ThemeColor OnSurface}"
+                            Margin="0,0,0,4"/>
+                        <Entry 
+                            Text="{Binding EditingCustomer.LastName}"
+                            BackgroundColor="{dx:ThemeColor SurfaceContainer}"
+                            TextColor="{dx:ThemeColor OnSurface}"
+                            FontSize="16"/>
+                    </StackLayout>
+                    
+                    <!-- Birthday Field -->
+                    <StackLayout>
+                        <Label 
+                            Text="Birth Date"
+                            FontSize="14"
+                            FontFamily="Roboto-Medium"
+                            TextColor="{dx:ThemeColor OnSurface}"
+                            Margin="0,0,0,4"/>
+                        <DatePicker 
+                            Date="{Binding EditingCustomerBirthday}"
+                            BackgroundColor="{dx:ThemeColor SurfaceContainer}"
+                            TextColor="{dx:ThemeColor OnSurface}"
+                            FontSize="16"/>
+                    </StackLayout>
+                    
+                </StackLayout>
+                
+                <!-- Popup Actions -->
+                <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,20,0,0">
+                    
+                    <dx:DXButton 
+                        Grid.Column="0"
+                        Content="Cancel"
+                        Command="{Binding CloseEditPopupCommand}"
+                        BackgroundColor="{dx:ThemeColor SurfaceContainer}"
+                        TextColor="{dx:ThemeColor OnSurface}"
+                        CornerRadius="8"
+                        Padding="16,12"
+                        FontSize="14"
+                        FontFamily="Roboto-Medium"/>
+                    
+                    <dx:DXButton 
+                        Grid.Column="1"
+                        Content="Save"
+                        Command="{Binding SaveCustomerCommand}"
+                        IsEnabled="{Binding IsNotBusy}"
+                        BackgroundColor="{dx:ThemeColor Primary}"
+                        TextColor="{dx:ThemeColor OnPrimary}"
+                        CornerRadius="8"
+                        Padding="16,12"
+                        FontSize="14"
+                        FontFamily="Roboto-Medium"/>
+                        
+                </Grid>
+                
+            </Grid>
+            
+        </dx:DXBorder>
+        
+        </dx:DXPopup>
         
     </Grid>
 

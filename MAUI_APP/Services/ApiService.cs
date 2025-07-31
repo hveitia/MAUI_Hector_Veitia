@@ -107,6 +107,52 @@ public class ApiService : IApiService
         }
     }
     
+    public async Task<object> UpdateCustomerAsync(string oid, Customer customer)
+    {
+        try
+        {
+            System.Diagnostics.Debug.WriteLine($"Starting UpdateCustomerAsync for OID: {oid}");
+            
+            // Call OData endpoint to update the customer
+            var response = await _httpService.PutAsync<Customer>($"odata/Customer({oid})", customer);
+            
+            if (response != null)
+            {
+                System.Diagnostics.Debug.WriteLine($"Customer updated successfully: {oid}");
+                return response;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Null response when updating customer: {oid}");
+                return false;
+            }
+        }
+        catch (HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP error in UpdateCustomerAsync: {httpEx.Message}");
+            
+            if (httpEx.Message.Contains("401") || httpEx.Message.Contains("403"))
+            {
+                System.Diagnostics.Debug.WriteLine("Authentication error - Invalid or expired token");
+                return false;
+            }
+            else if (httpEx.Message.Contains("404"))
+            {
+                System.Diagnostics.Debug.WriteLine("Customer not found");
+                return false;
+            }
+
+            return false;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"General error in UpdateCustomerAsync: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+            
+            return false;
+        }
+    }
+    
     public async Task<object> DeleteCustomerAsync(string oid)
     {
         try

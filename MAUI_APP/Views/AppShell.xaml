@@ -43,7 +43,7 @@
         ContentTemplate="{DataTemplate views:DefaultPage}" />
         
     <ShellContent
-        Title="Clientes"
+        Title="Customers"
         Icon="person"
         Route="customers"
         ContentTemplate="{DataTemplate customers:CustomersPage}" />
