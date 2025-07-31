@@ -12467,6 +12467,7 @@
         "net9.0-android"
       ],
       "sources": {
+        "/usr/local/share/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {},
         "https://nuget.devexpress.com/YblzQZ8xeep19kCHMBSQtIMxQhwkeMLZBVkFrdmUNzMvKUawKF/api/v3/index.json": {}
       },
@@ -12485,7 +12486,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net9.0-android35.0": {

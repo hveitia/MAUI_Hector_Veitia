@@ -151,22 +151,22 @@ public class HttpService : IHttpService
         }
     }
 
-    public async Task<T?> DeleteAsync<T>(string endpoint)
+    public async Task<bool> DeleteAsync(string endpoint)
     {
         try
         {
             var response = await _httpClient.DeleteAsync(endpoint);
             response.EnsureSuccessStatusCode();
 
-            var content = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<T>(content, _jsonOptions);
-            return result;
+            return response.IsSuccessStatusCode;
+
+
         }
         catch (Exception ex)
         {
-            // Log error
+            
             System.Diagnostics.Debug.WriteLine($"DELETE Error: {ex.Message}");
-            return default;
+            return false;
         }
     }
 

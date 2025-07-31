@@ -122,7 +122,7 @@ public class CustomersViewModel : BaseViewModel
         }
     }
 
-    public async Task DeleteCustomerAsync(string oid)
+    public async Task<bool> DeleteCustomerAsync(string oid)
     {
         if (string.IsNullOrEmpty(oid))
         {
@@ -130,51 +130,51 @@ public class CustomersViewModel : BaseViewModel
                 "Error", 
                 "Invalid customer ID.", 
                 "OK");
-            return;
+            return false;
         }
 
         IsBusy = true;
         try
         {
             System.Diagnostics.Debug.WriteLine($"CustomersViewModel: Starting customer deletion with OID: {oid}");
-            
+
             // Find customer in local list to show their name in confirmation
             var customerToDelete = AllCustomers.FirstOrDefault(c => c.Oid == oid);
             string customerName = customerToDelete?.FullName ?? "Unknown customer";
-            
+
             // Show confirmation to user
             bool confirm = await Shell.Current.DisplayAlert(
                 "Confirm Deletion",
                 $"Are you sure you want to delete {customerName}? This action cannot be undone.",
                 "Delete",
                 "Cancel");
-                
+
             if (!confirm)
             {
                 System.Diagnostics.Debug.WriteLine("CustomersViewModel: Deletion cancelled by user");
-                return;
+                return false;
             }
-            
+
             // Check if we have authentication token
             if (!_httpService.HasAuthToken())
             {
                 System.Diagnostics.Debug.WriteLine("CustomersViewModel: NO AUTHENTICATION TOKEN for deletion");
                 await Shell.Current.DisplayAlert(
-                    "Authentication Error", 
-                    "You don't have permission to perform this action. Please log in again.", 
+                    "Authentication Error",
+                    "You don't have permission to perform this action. Please log in again.",
                     "OK");
-                    
+
                 await Shell.Current.GoToAsync("//");
-                return;
+                return false;
             }
-            
+
             // Call API service to delete customer
             var result = await _apiService.DeleteCustomerAsync(oid);
-            
+
             if (result != null && result is bool success && success)
             {
                 System.Diagnostics.Debug.WriteLine($"CustomersViewModel: Customer deleted successfully: {oid}");
-                
+
                 // Remove customer from local list
                 if (customerToDelete != null)
                 {
@@ -182,46 +182,50 @@ public class CustomersViewModel : BaseViewModel
                     updatedList.Remove(customerToDelete);
                     AllCustomers = updatedList;
                 }
-                
+
                 await Shell.Current.DisplayAlert(
-                    "Success", 
-                    $"{customerName} has been deleted successfully.", 
+                    "Success",
+                    $"{customerName} has been deleted successfully.",
                     "OK");
             }
             else
             {
                 System.Diagnostics.Debug.WriteLine($"CustomersViewModel: Error deleting customer");
                 await Shell.Current.DisplayAlert(
-                    "Error", 
-                    $"Could not delete customer ", 
+                    "Error",
+                    $"Could not delete customer ",
                     "OK");
             }
+            
+            return  true;
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"CustomersViewModel Deletion error: {ex.Message}");
             System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
-            
+
             // Check if it's an authentication error
             if (ex.Message.Contains("401") || ex.Message.Contains("403") || ex.Message.Contains("Unauthorized"))
             {
                 await Shell.Current.DisplayAlert(
-                    "Authentication Error", 
-                    "Your session has expired. Please log in again.", 
+                    "Authentication Error",
+                    "Your session has expired. Please log in again.",
                     "OK");
                 await Shell.Current.GoToAsync("//");
             }
             else
             {
                 await Shell.Current.DisplayAlert(
-                    "Error", 
-                    $"Unexpected error deleting customer: {ex.Message}", 
+                    "Error",
+                    $"Unexpected error deleting customer: {ex.Message}",
                     "OK");
             }
+            return false;
         }
         finally
         {
             IsBusy = false;
+
         }
     }
     

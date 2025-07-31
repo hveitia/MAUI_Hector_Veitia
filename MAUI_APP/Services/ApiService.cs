@@ -58,15 +58,6 @@ public class ApiService : IApiService
         };
     }
 
-    public async Task<ApiResponse> DeleteUserAsync(int userId)
-    {
-        var response = await _httpService.DeleteAsync<ApiResponse>($"users/{userId}");
-        return response ?? new ApiResponse
-        {
-            Success = false,
-            Error = "Error deleting user"
-        };
-    }
     
     public async Task<List<Customer>> GetCustomersAsync()
     {
@@ -153,19 +144,19 @@ public class ApiService : IApiService
         }
     }
     
-    public async Task<object> DeleteCustomerAsync(string oid)
+    public async Task<bool> DeleteCustomerAsync(string oid)
     {
         try
         {
             System.Diagnostics.Debug.WriteLine($"Starting DeleteCustomerAsync for OID: {oid}");
             
             // Call OData endpoint to delete the customer
-            var response = await _httpService.DeleteAsync<ODataResponse<object>>($"odata/Customer({oid})");
+            var response = await _httpService.DeleteAsync($"odata/Customer({oid})");
             
-            if (response?.Value != null)
+            if (response)
             {
                 System.Diagnostics.Debug.WriteLine($"Customer deleted successfully: {oid}");
-                return response.Value;
+                return response;
             }
             else
             {

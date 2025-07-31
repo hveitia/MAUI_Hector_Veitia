@@ -9,8 +9,7 @@ public interface IApiService
     Task<ApiResponse<List<User>>> GetUsersAsync();
     Task<ApiResponse<User>> CreateUserAsync(User user);
     Task<ApiResponse<User>> UpdateUserAsync(int userId, User user);
-    Task<ApiResponse> DeleteUserAsync(int userId);
     Task<List<Customer>> GetCustomersAsync();
     Task<object> UpdateCustomerAsync(string oid, Customer customer);
-    Task<object> DeleteCustomerAsync(string oid);
+    Task<bool> DeleteCustomerAsync(string oid);
 }

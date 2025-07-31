@@ -52,7 +52,7 @@ public class LoginViewModel : BaseViewModel
     {
         if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
         {
-            ErrorMessage = "Por favor, ingresa usuario y contraseña";
+            ErrorMessage = "Please enter username and password";
             return;
         }
 
@@ -71,33 +71,33 @@ public class LoginViewModel : BaseViewModel
 
             if (response.Oid != null && !string.IsNullOrEmpty(response.Token))
             {
-                System.Diagnostics.Debug.WriteLine($"Login exitoso - Token recibido: {response.Token[..Math.Min(response.Token.Length, 20)]}...");
-                
+                System.Diagnostics.Debug.WriteLine($"Login successful - Token received: {response.Token[..Math.Min(response.Token.Length, 20)]}...");
+            
                 // Set authentication token
                 _httpService.SetAuthToken(response.Token);
-                System.Diagnostics.Debug.WriteLine("Token configurado en HttpService");
-                
-                // Verificar que el token se configuró correctamente
+                System.Diagnostics.Debug.WriteLine("Token configured in HttpService");
+            
+                // Verify token was set correctly
                 if (_httpService.HasAuthToken())
                 {
-                    System.Diagnostics.Debug.WriteLine("✅ Verificación: Token está presente en HttpService");
+                    System.Diagnostics.Debug.WriteLine("✅ Verification: Token is present in HttpService");
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine("❌ ERROR: Token NO se configuró correctamente");
+                    System.Diagnostics.Debug.WriteLine("❌ ERROR: Token was NOT configured correctly");
                 }
-                
+            
                 // Navigate to customers page
                 await Shell.Current.GoToAsync("//customers");
             }
             else
             {
-                ErrorMessage =  "Error al iniciar sesión";
+                ErrorMessage = "Login error";
             }
         }
         catch (Exception ex)
         {
-            ErrorMessage = "Error de conexión. Intenta nuevamente.";
+            ErrorMessage = "Connection error. Please try again.";
             System.Diagnostics.Debug.WriteLine($"Login error: {ex.Message}");
         }
         finally
